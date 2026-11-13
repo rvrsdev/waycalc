@@ -1,5 +1,9 @@
-use gtk4::prelude::*;
+use std::iter::empty;
+
+// enum that tells gtk4 library what to do with an event
+use glib::Propagation;
 use gtk4::{Application, ApplicationWindow, Box, Entry};
+use gtk4::{gdk, prelude::*};
 use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
 
 fn main() -> glib::ExitCode {
@@ -19,12 +23,22 @@ fn main() -> glib::ExitCode {
         window.set_keyboard_mode(KeyboardMode::OnDemand);
 
         let entry = Entry::new();
-        entry.set_placeholder_text(Some("type here…"));
-        entry.connect_changed(|entry| {
-            println!("text: {}", entry.text());
-        });
+        {
+            let window_clone = window.clone();
+            entry.connect_activate(move |entry| {
+                let expression = entry.text().to_string();
 
-        let layout = Box::new(gtk4::Orientation::Vertical, 0);
+                if expression.is_empty() {
+                    return;
+                }
+
+                let res = 55;
+                println!("Result: {res}");
+                window_clone.close();
+            });
+        }
+
+        let layout = Box::new(gtk4::Orientation::Vertical, 10);
         layout.append(&entry);
 
         window.set_child(Some(&layout));
