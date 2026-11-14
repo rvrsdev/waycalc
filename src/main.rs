@@ -1,7 +1,13 @@
+mod calc;
+
 // enum that tells gtk4 library what to do with an event
 use gtk4::{Application, ApplicationWindow, Box, CssProvider, Entry, EventControllerKey};
 use gtk4::{gdk, prelude::*};
 use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
+
+use crate::calc::tokenize;
+
+const APP_ID: &str = "com.rvrsdev.waycalc";
 
 const CSS: &str = r#"
     .waycalc {
@@ -14,65 +20,15 @@ const CSS: &str = r#"
 "#;
 
 fn main() -> glib::ExitCode {
-    let app = Application::builder()
-        .application_id("com.rvrsdev.waycalc")
-        .build();
+    let app = Application::builder().application_id(APP_ID).build();
 
     app.connect_activate(|app| {
-        load_css();
+        build_ui(app);
 
-        let window = ApplicationWindow::new(app);
-        window.init_layer_shell();
+        let expression = "2+3/9";
+        let tokens = tokenize(expression).unwrap();
 
-        window.set_title(Some("waycalc"));
-        window.set_default_height(40);
-        window.set_default_width(200);
-        window.set_layer(Layer::Top);
-        window.set_anchor(Edge::Top, true);
-        window.set_keyboard_mode(KeyboardMode::OnDemand);
-
-        let entry = Entry::new();
-        {
-            let window_callback = window.clone();
-            entry.connect_activate(move |entry| {
-                let expression = entry.text().to_string();
-
-                if expression.is_empty() {
-                    return;
-                }
-
-                let res = 55;
-                println!("Result: {res}");
-                window_callback.close();
-            });
-        }
-
-        let keys_controller = EventControllerKey::new();
-        {
-            let window_callback = window.clone();
-
-            keys_controller.connect_key_pressed(move |_, key, _, _| {
-                if key == gdk::Key::Escape {
-                    window_callback.close();
-                    glib::Propagation::Stop
-                } else {
-                    glib::Propagation::Proceed
-                }
-            });
-        }
-        window.add_controller(keys_controller);
-
-        let layout = Box::new(gtk4::Orientation::Vertical, 10);
-        layout.append(&entry);
-
-        window.set_child(Some(&layout));
-        entry.grab_focus();
-
-        layout.add_css_class("waycalc");
-        window.add_css_class("waycalc");
-        entry.add_css_class("waycalc-entry");
-
-        window.present();
+        println!("{tokens:?}")
     });
 
     app.run()
@@ -89,4 +45,61 @@ fn load_css() {
             gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION,
         );
     }
+}
+
+fn build_ui(app: &Application) {
+    load_css();
+
+    let window = ApplicationWindow::new(app);
+    window.init_layer_shell();
+
+    window.set_title(Some("waycalc"));
+    window.set_default_height(40);
+    window.set_default_width(200);
+    window.set_layer(Layer::Top);
+    window.set_anchor(Edge::Top, true);
+    window.set_keyboard_mode(KeyboardMode::OnDemand);
+
+    let entry = Entry::new();
+    {
+        let window_callback = window.clone();
+        entry.connect_activate(move |entry| {
+            let expression = entry.text().to_string();
+
+            if expression.is_empty() {
+                return;
+            }
+
+            let res = 55;
+            println!("Result: {res}");
+            window_callback.close();
+        });
+    }
+
+    let keys_controller = EventControllerKey::new();
+    {
+        let window_callback = window.clone();
+
+        keys_controller.connect_key_pressed(move |_, key, _, _| {
+            if key == gdk::Key::Escape {
+                window_callback.close();
+                glib::Propagation::Stop
+            } else {
+                glib::Propagation::Proceed
+            }
+        });
+    }
+    window.add_controller(keys_controller);
+
+    let layout = Box::new(gtk4::Orientation::Vertical, 10);
+    layout.append(&entry);
+
+    window.set_child(Some(&layout));
+    entry.grab_focus();
+
+    layout.add_css_class("waycalc");
+    window.add_css_class("waycalc");
+    entry.add_css_class("waycalc-entry");
+
+    window.present();
 }
