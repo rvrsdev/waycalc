@@ -1,7 +1,7 @@
 mod calc;
 
 use calc::evaluate;
-use gtk4::{Application, ApplicationWindow, Box, CssProvider, Entry, EventControllerKey};
+use gtk4::{Application, ApplicationWindow, Box, CssProvider, Entry, EventControllerKey, Label};
 use gtk4::{gdk, prelude::*};
 use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
 use std::result::Result::{Err, Ok};
@@ -54,20 +54,25 @@ fn build_ui(app: &Application) {
     window.set_anchor(Edge::Top, true);
     window.set_keyboard_mode(KeyboardMode::OnDemand);
 
+    let label = Label::new(Some("res: "));
+
     let entry = Entry::new();
     {
+        let label_clone = label.clone();
+
         entry.connect_activate(move |entry| {
             let expression = entry.text().to_string();
+
             if expression.trim().is_empty() {
                 return;
             }
 
             match evaluate(&expression) {
                 Ok(result) => {
-                    println!("Result {result}");
+                    label_clone.set_text(&format!("res: {}", result));
                 }
                 Err(error) => {
-                    print!("Error {error}");
+                    label_clone.set_text(&format!("err: {}", error));
                 }
             }
         });
@@ -89,7 +94,9 @@ fn build_ui(app: &Application) {
     window.add_controller(keys_controller);
 
     let layout = Box::new(gtk4::Orientation::Vertical, 10);
+
     layout.append(&entry);
+    layout.append(&label);
 
     window.set_child(Some(&layout));
     entry.grab_focus();
