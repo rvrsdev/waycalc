@@ -1,11 +1,10 @@
 mod calc;
 
-// enum that tells gtk4 library what to do with an event
+use calc::evaluate;
 use gtk4::{Application, ApplicationWindow, Box, CssProvider, Entry, EventControllerKey};
 use gtk4::{gdk, prelude::*};
 use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
-
-use crate::calc::tokenize;
+use std::result::Result::{Err, Ok};
 
 const APP_ID: &str = "com.rvrsdev.waycalc";
 
@@ -24,11 +23,6 @@ fn main() -> glib::ExitCode {
 
     app.connect_activate(|app| {
         build_ui(app);
-
-        let expression = "2+3/9";
-        let tokens = tokenize(expression).unwrap();
-
-        println!("{tokens:?}")
     });
 
     app.run()
@@ -62,17 +56,20 @@ fn build_ui(app: &Application) {
 
     let entry = Entry::new();
     {
-        let window_callback = window.clone();
         entry.connect_activate(move |entry| {
             let expression = entry.text().to_string();
-
-            if expression.is_empty() {
+            if expression.trim().is_empty() {
                 return;
             }
 
-            let res = 55;
-            println!("Result: {res}");
-            window_callback.close();
+            match evaluate(&expression) {
+                Ok(result) => {
+                    println!("Result {result}");
+                }
+                Err(error) => {
+                    print!("Error {error}");
+                }
+            }
         });
     }
 
