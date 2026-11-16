@@ -1,7 +1,9 @@
 mod calc;
 
 use calc::evaluate;
-use gtk4::{Application, ApplicationWindow, Box, CssProvider, Entry, EventControllerKey, Label};
+use gtk4::{
+    Align, Application, ApplicationWindow, Box, CssProvider, Entry, EventControllerKey, Label,
+};
 use gtk4::{gdk, prelude::*};
 use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
 use std::result::Result::{Err, Ok};
@@ -54,7 +56,8 @@ fn build_ui(app: &Application) {
     window.set_anchor(Edge::Top, true);
     window.set_keyboard_mode(KeyboardMode::OnDemand);
 
-    let label = Label::new(Some("res: "));
+    let label = Label::new(None);
+    label.set_halign(Align::Start);
 
     let entry = Entry::new();
     {

@@ -181,9 +181,11 @@ fn read_number(chars: &mut std::iter::Peekable<std::str::Chars<'_>>) -> Result<f
         .map_err(|_| CalcError::InvalidNumber(number))
 }
 
-/// Storing all tokens and current iterating position
-///
-/// A cursor for tokens array
+/**
+Storing all tokens and current iterating position
+
+A cursor for tokens array
+*/
 struct Parser {
     tokens: Vec<Token>,
     position: usize,
