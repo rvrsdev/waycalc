@@ -16,7 +16,7 @@ const CSS: &str = r#"
     }
 
     .waycalc-entry {
-        border-bottom: 2px solid #222;
+        padding: 5px;
     }
 "#;
 
@@ -72,10 +72,12 @@ fn build_ui(app: &Application) {
 
             match evaluate(&expression) {
                 Ok(result) => {
-                    label_clone.set_text(&format!("res: {}", result));
+                    let text = &result.to_string();
+                    label_clone.set_text(text);
+                    entry.clipboard().set_text(text);
                 }
                 Err(error) => {
-                    label_clone.set_text(&format!("err: {}", error));
+                    label_clone.set_text(&format!("{}", error));
                 }
             }
         });
