@@ -11,10 +11,15 @@ const APP_ID: &str = "com.rvrsdev.waycalc";
 const CSS: &str = r#"
     .waycalc {
         background-color: #000;
+        border: 1px solid #faf9f6;
     }
 
-    .waycalc-entry {
+    .waycalc_entry {
         padding: 5px;
+    }
+
+    .waycalc_result {
+        padding: 0px 6px;
     }
 "#;
 
@@ -28,14 +33,22 @@ fn main() -> glib::ExitCode {
         window.init_layer_shell();
 
         window.set_title(Some("waycalc"));
-        window.set_default_height(40);
-        window.set_default_width(200);
+        window.set_size_request(200, 40);
         window.set_layer(Layer::Top);
         window.set_anchor(Edge::Top, true);
         window.set_keyboard_mode(KeyboardMode::OnDemand);
 
         let label = Label::new(None);
+        label.set_size_request(60, 40);
+        label.set_hexpand(false);
+        label.set_halign(gtk4::Align::End);
+        label.set_direction(gtk4::TextDirection::Rtl);
+        label.set_ellipsize(gdk::pango::EllipsizeMode::None);
+
         let entry = Entry::new();
+        entry.set_hexpand(true);
+        entry.set_halign(gtk4::Align::Fill);
+
         setup_entry(&entry, &label);
 
         let keys_controller = EventControllerKey::new();
@@ -61,8 +74,8 @@ fn main() -> glib::ExitCode {
         window.set_child(Some(&layout));
 
         layout.add_css_class("waycalc");
-        window.add_css_class("waycalc");
-        entry.add_css_class("waycalc-entry");
+        entry.add_css_class("waycalc_entry");
+        label.add_css_class("waycalc_result");
 
         entry.grab_focus();
         window.present();
