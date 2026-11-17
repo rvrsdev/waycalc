@@ -46,4 +46,4 @@ Then reference it in one of the `modules-` block:
 
 Styling is not supported in current release, but it's planned for future.
 ## License
-This project is licensed under the [MIT License](LICENSE.md).
+This project is licensed under the [MIT License](LICENSE).
