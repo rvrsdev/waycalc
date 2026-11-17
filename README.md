@@ -15,7 +15,7 @@ sudo pacman -S --needed base-devel git rust gtk4 gtk4-layer-shell
 ## Install
 ### Build from source
 ```bash
-git clone https://github.com/rvrs/waycalc.git
+git clone https://github.com/rvrsdev/waycalc.git
 cd waycalc
 cargo build --release
 install -Dm755 target/release/waycalc ~/.local/bin/waycalc
