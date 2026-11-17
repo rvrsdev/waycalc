@@ -26,7 +26,7 @@ pub enum CalcError {
     /// Ex. `2+`, missing number after an operator
     UnexpectedEnd,
 
-    /// Например, `+2` в начале или `2 3` — токен не подходит по грамматике.
+    /// Ex., `+2`, unexpected token before an operator
     UnexpectedToken(Token),
 
     /// Not closed paren expression, ex. `(2+3`
