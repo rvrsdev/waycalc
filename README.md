@@ -1,7 +1,9 @@
 # waycalc
 Simple calculator widget for Waybar written in Rust using GTK4 library and `gtk4-layer-shell`.
+
+![screenshot](screenshot.png)
 ## Requirements
-Rust and Cargo
+- Rust and Cargo
 - GTK4
 - `gtk4-layer-shell`
 - A Wayland compositor with layer-shell support
@@ -19,11 +21,9 @@ cargo build --release
 install -Dm755 target/release/waycalc ~/.local/bin/waycalc
 ```
 Make sure that `~/.local/bin` is in your `PATH`.
-### Prebuilt binary
-Grab prebuilt binary from releases page. Extract it and drop waycalc executable somewhere on your `PATH`. 
 ### AUR (Soon)
 ## Usage
-Write your problem, click **Enter** and get your result. Supported operators: 
+Write your problem, press **Enter** and get your result. It will auto copy to your clipboard. To close window press **Esc**. Supported operators: 
 - **Addition** `+`, 
 - **Substraction** `-`,`
 - **Multiplication** `*`,

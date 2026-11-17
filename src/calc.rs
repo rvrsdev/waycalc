@@ -231,7 +231,9 @@ impl Parser {
         // While adding or substacting
         while let Some(Token::Plus | Token::Minus) = self.peek() {
             // Getting an operator
-            let operator = self.next().expect("Оператор уже проверен через peek");
+            let operator = self
+                .next()
+                .expect("The operator has already been verified using peek");
 
             // Getting right part
             let right = self.parse_term()?;
@@ -261,7 +263,9 @@ impl Parser {
         let mut left = self.parse_factor()?;
 
         while let Some(Token::Multiply | Token::Divide) = self.peek() {
-            let operator = self.next().expect("Оператор уже проверен через peek");
+            let operator = self
+                .next()
+                .expect("The operator has already been verified using peek");
 
             let right = self.parse_factor()?;
 
