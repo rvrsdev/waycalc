@@ -21,6 +21,8 @@ cargo build --release
 install -Dm755 target/release/waycalc ~/.local/bin/waycalc
 ```
 Make sure that `~/.local/bin` is in your `PATH`.
+### Prebuilt binary
+Grab prebuilt binary from releases page and drop it anywhere on your `PATH`. 
 ### AUR (Soon)
 ## Usage
 Write your problem, press **Enter** and get your result. It will auto copy to your clipboard. To close window press **Esc**. Supported operators: 
